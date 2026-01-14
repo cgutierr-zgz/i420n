@@ -11,11 +11,11 @@ enum QuantityCategory { zero, one, two, few, many, other }
 
 enum QuantityType { cardinal, ordinal }
 
-/// A simple locale representation compatible with Flutter's [Locale].
+/// A simple locale representation compatible with Flutter's Locale class.
 ///
-/// This class provides the same interface as Flutter's [Locale] class,
+/// This class provides the same interface as Flutter's Locale class,
 /// allowing i420n to work in both pure Dart and Flutter projects.
-/// In Flutter projects, you can use this directly with [MaterialApp.supportedLocales].
+/// In Flutter projects, you can use this directly with `MaterialApp.supportedLocales`.
 class Locale {
   /// Creates a new [Locale] with the given [languageCode] and optional [countryCode].
   const Locale(this.languageCode, [this.countryCode]);
@@ -66,7 +66,7 @@ abstract class I420nMessageBundle {
 
   /// Returns a [Locale] object for this message bundle.
   ///
-  /// This is useful for Flutter integration with [MaterialApp.locale].
+  /// This is useful for Flutter integration with `MaterialApp.locale`.
   Locale get flutterLocale;
 }
 
