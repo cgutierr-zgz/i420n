@@ -1,11 +1,11 @@
 // ignore_for_file: prefer_single_quotes
 import 'package:build/build.dart';
-import 'package:i69n/i69n.dart';
-import 'package:i69n/src/i69n_impl.dart';
+import 'package:i420n/i420n.dart';
+import 'package:i420n/src/i420n_impl.dart';
 import 'package:test/test.dart';
 import 'package:yaml/yaml.dart';
 
-import 'testMessages.i69n.dart';
+import 'testMessages.i420n.dart';
 
 void main() {
   group('Messages meta data', () {
@@ -152,7 +152,7 @@ message"""), equals(r"Multiline\nmessage")); // handles multiline strings
           'on: off\n'
           'or:\n' // shouldn't have [] operator
           '  something:\n'
-          '    _i69n: nomap,noescape\n'
+          '    _i420n: nomap,noescape\n'
           '    a: A\\\'A\n' // inside 'noescape' flag, author must escape
           '    b: B\n'
           '    c: C\n'
@@ -171,7 +171,7 @@ message"""), equals(r"Multiline\nmessage")); // handles multiline strings
       }
 
       var result = output.toString();
-      expect(result.contains("[] operator is disabled in en.or.something, see _i69n: nomap flag."), isTrue);
+      expect(result.contains("[] operator is disabled in en.or.something, see _i420n: nomap flag."), isTrue);
       expect(result.contains("String get subfoo => \"sub'bar\";"), isTrue);
       expect(result.contains("String get a => \"A\\'A\";"), isTrue); // copied escape sequence
     });
@@ -241,7 +241,7 @@ message"""), equals(r"Multiline\nmessage")); // handles multiline strings
       root.isDefault = true;
       root.languageCode = "en";
       var todoList = <TodoItem>[];
-      var yaml = '_i69n: map\nhello: "Hello"';
+      var yaml = '_i420n: map\nhello: "Hello"';
 
       // Mock BuilderOptions with nomap: true
       var mockOptions = _MockBuilderOptions({'nomap': true});
@@ -265,7 +265,7 @@ message"""), equals(r"Multiline\nmessage")); // handles multiline strings
       root.isDefault = true;
       root.languageCode = "en";
       var todoList = <TodoItem>[];
-      var yaml = '_i69n: nomap\nhello: "Hello"';
+      var yaml = '_i420n: nomap\nhello: "Hello"';
 
       // Mock BuilderOptions with nomap: false (disabled)
       var mockOptions = _MockBuilderOptions({'nomap': false});
@@ -289,7 +289,7 @@ message"""), equals(r"Multiline\nmessage")); // handles multiline strings
       root.isDefault = true;
       root.languageCode = "en";
       var todoList = <TodoItem>[];
-      var yaml = '_i69n: nomap\nhello: "Hello"';
+      var yaml = '_i420n: nomap\nhello: "Hello"';
 
       var mockOptions = _MockBuilderOptions({'nomap': true});
       prepareTodoList(null, null, todoList, loadYaml(yaml), root, mockOptions);
@@ -303,7 +303,7 @@ message"""), equals(r"Multiline\nmessage")); // handles multiline strings
       // Should allow dot navigation but disable switch-case
       expect(result.contains("var index = key.indexOf('.');"), isTrue);
       expect(result.contains("switch(key)"), isFalse);
-      expect(result.contains("see _i69n: nomap flag"), isTrue);
+      expect(result.contains("see _i420n: nomap flag"), isTrue);
     });
 
     test('notraverse disables dot navigation', () {
@@ -313,7 +313,7 @@ message"""), equals(r"Multiline\nmessage")); // handles multiline strings
       root.isDefault = true;
       root.languageCode = "en";
       var todoList = <TodoItem>[];
-      var yaml = '_i69n: notraverse\nhello: "Hello"';
+      var yaml = '_i420n: notraverse\nhello: "Hello"';
 
       var mockOptions = _MockBuilderOptions({'notraverse': true});
       prepareTodoList(null, null, todoList, loadYaml(yaml), root, mockOptions);
@@ -336,7 +336,7 @@ message"""), equals(r"Multiline\nmessage")); // handles multiline strings
       root.isDefault = true;
       root.languageCode = "en";
       var todoList = <TodoItem>[];
-      var yaml = '_i69n: nomap,notraverse\nhello: "Hello"';
+      var yaml = '_i420n: nomap,notraverse\nhello: "Hello"';
 
       prepareTodoList(null, null, todoList, loadYaml(yaml), root, null);
 
@@ -349,7 +349,67 @@ message"""), equals(r"Multiline\nmessage")); // handles multiline strings
       // Should disable everything
       expect(result.contains("var index = key.indexOf('.');"), isFalse);
       expect(result.contains("switch(key)"), isFalse);
-      expect(result.contains("see _i69n: nomap, notraverse flag"), isTrue);
+      expect(result.contains("see _i420n: nomap, notraverse flag"), isTrue);
+    });
+  });
+
+  group('Locale information', () {
+    test('Root message bundle has languageCode and localeName', () {
+      var m = TestMessages();
+      // testMessages.i420n.yaml uses _i420n_language: sk
+      expect(m.languageCode, equals('sk'));
+      expect(m.localeName, equals('en'));
+    });
+
+    test('Nested message bundle has languageCode and localeName', () {
+      var m = TestMessages();
+      expect(m.generic.languageCode, equals('sk'));
+      expect(m.generic.localeName, equals('en'));
+    });
+
+    test('Supported locales list contains default locale', () {
+      expect(testMessagesSupportedLocales.contains('en'), isTrue);
+    });
+
+    test('Register and get locale by name', () {
+      // Create a mock locale
+      var defaultMessages = TestMessages();
+      registerTestMessagesLocale(defaultMessages);
+
+      // Try to get it back
+      var retrieved = getTestMessagesByLocale('en');
+      expect(retrieved, isNotNull);
+      expect(retrieved!.localeName, equals('en'));
+    });
+
+    test('Get non-existent locale returns null', () {
+      var retrieved = getTestMessagesByLocale('nonexistent');
+      expect(retrieved, isNull);
+    });
+
+    test('Flutter locale utilities', () {
+      var m = TestMessages();
+      // flutterLocale is derived from localeName ('en'), not languageCode ('sk')
+      expect(m.flutterLocale.languageCode, equals('en'));
+      expect(m.flutterLocale.countryCode, isNull);
+
+      // Test supportedLocalesFlutter
+      expect(testMessagesSupportedLocalesFlutter.isNotEmpty, isTrue);
+      expect(testMessagesSupportedLocalesFlutter.first.languageCode, equals('en'));
+    });
+
+    test('Find by Flutter Locale with fallback', () {
+      // Register a locale first
+      registerTestMessagesLocale(TestMessages());
+
+      // Exact match should work
+      var found = findTestMessagesByLocale(Locale('en'));
+      expect(found, isNotNull);
+      expect(found!.localeName, equals('en'));
+
+      // Non-existent should return null
+      var notFound = findTestMessagesByLocale(Locale('zz'));
+      expect(notFound, isNull);
     });
   });
 }

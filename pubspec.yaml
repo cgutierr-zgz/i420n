@@ -1,7 +1,9 @@
-name: i69n
-description: Simple internationalization tool for Dart and Flutter, based on YAML files and source code generation.
-version: 3.4.0
-homepage: https://github.com/fnx-io/i69n
+name: i420n
+description: Simple, type-safe internationalization (i18n) for Dart and Flutter. YAML-based with code generation, Flutter Locale support, and pluralization.
+version: 1.0.0
+homepage: https://github.com/cgutierr-zgz/i420n
+repository: https://github.com/cgutierr-zgz/i420n
+issue_tracker: https://github.com/cgutierr-zgz/i420n/issues
 
 environment:
   sdk: ^3.6.0

@@ -1,13 +1,13 @@
-_i69n_import: dart:io
-_i69n_language: sk
+_i420n_import: dart:io
+_i420n_language: sk
 generic:
-  _i69n: flag
+  _i420n: flag
   ok: OK
   done: DONE
   letsGo: Let's go! # escaped automatically
   ordinalNumber(int n): "${_ordinal(n, one: '1st', two: '2nd', few: '3rd', other: '${n}th')}"
 invoice:
-  _i69n: noescape,nomap # configuration flags
+  _i420n: noescape,nomap # configuration flags
   create: Create invoice
   delete: Delete  invoice
   help: "Use this function
@@ -27,6 +27,6 @@ friends:
     name: Aaaaa
     description: Aa Aa Aa
   eva:
-    _i69n_implements: MichaelFriendsTestMessages # it's a node Michael in Friends in TestMessages file
+    _i420n_implements: MichaelFriendsTestMessages # it's a node Michael in Friends in TestMessages file
     name: Bbbbb
     description: Bb Bb Bb

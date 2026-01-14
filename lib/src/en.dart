@@ -1,4 +1,4 @@
-import 'package:i69n/i69n.dart';
+import 'package:i420n/i420n.dart';
 
 ///
 /// Quantity category resolver for english.

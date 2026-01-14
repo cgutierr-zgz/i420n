@@ -3,7 +3,7 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import 'package:build/build.dart';
-import 'package:i69n/src/i69n_impl.dart';
+import 'package:i420n/src/i420n_impl.dart';
 
 Builder yamlBasedBuilder(BuilderOptions options) => YamlBasedBuilder(options);
 
@@ -31,6 +31,6 @@ class YamlBasedBuilder implements Builder {
 
   @override
   final buildExtensions = const {
-    '.i69n.yaml': ['.i69n.dart']
+    '.i420n.yaml': ['.i420n.dart']
   };
 }
